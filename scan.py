@@ -33,12 +33,10 @@ def CodeReader(imname):
         # if model == 'QRCODE':
         #     barcodeData = barcode.data.decode("utf-8")
         #     print(barcodeData)
-        text = "{} ".format(barcode.data)
+        text = "{} ".format(barcode.data.decode(encoding="GBK", errors="strict"))#UTF-8 不能编码部分中文字符，会提示超出utf-8范围
         cv2.putText(image, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX,
                         0.5, (0, 0, 255), 2)
-
-        print(barcode.data.decode(encoding="GB2312", errors="strict"))#UTF-8 不能编码部分中文字符，会提示超出utf-8范围
-
+        print(text)
     print('#'*10)
 
 
@@ -55,6 +53,6 @@ if __name__ == '__main__':
 
         for filename in filenames[2]:
             imname = os.path.join(rootdir, filename)
-            print ('Imagename:',imname)
+
             CodeReader(imname)
 
