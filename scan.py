@@ -9,7 +9,7 @@ import os
 
 def CodeReader(imname):
 
-    print('@@@@@@@@@@@@@@@@')
+    print('test on:',imname)
     image = cv2.imread(imname)
 
     barcodestemp = decode(image)
@@ -18,36 +18,33 @@ def CodeReader(imname):
         # find the barcodes in the image and decode each of the barcodes
         barcodes = pyzbar.decode(image)
         model = 'QRCODE'
-        print (model)
 
     else:
         barcodes = barcodestemp
         model = 'DATAMATRIX'
-        print (model)
+
 
 
     for barcode in barcodes:
 
         (x, y, w, h) = barcode.rect
         cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
-        # if model == 'QRCODE':
-        #     barcodeData = barcode.data.decode("utf-8")
-        #     print(barcodeData)
-        text = "{} ".format(barcode.data.decode(encoding="GBK", errors="strict"))#UTF-8 不能编码部分中文字符，会提示超出utf-8范围
-        cv2.putText(image, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX,
+        info = barcode.data.decode(encoding="GBK", errors="strict")
+        text = "[Type]: {} \n[Info]: {} ".format(model,info)#UTF-8 不能编码部分中文字符，会提示超出utf-8范围,所以用GBK
+        cv2.putText(image, info, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX,
                         0.5, (0, 0, 255), 2)
         print(text)
-    print('#'*10)
+    print('\n')
 
-
-    cv2.imshow(imname, image)
-    cv2.waitKey(200)
+    cv2.imshow('Barcode', image)
+    cv2.waitKey(0)
 
 if __name__ == '__main__':
 
     print('Enter the absolute directory of codes:')
     rootdir = input()
-    print('directory:', rootdir)
+    print('code directory:', rootdir)
+    print ('start codereader....')
 
     for filenames in os.walk(rootdir):
 
